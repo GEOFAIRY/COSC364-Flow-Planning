@@ -1,9 +1,8 @@
 import sys
 import time
-
+import subprocess
 
 path_num=2
-
 
 def demand_volume(source, transit, dest):
     output=""
@@ -113,7 +112,21 @@ def create_file(lp, X, Y, Z):
     f = open(file_name,'w')
     f.write(lp)
     f.close()
+    
+def run_cplex(file_name):
+    command="/home/cosc/student/myu37/cplex/bin/x86-64_linux/cplex"
+    args=[
+        "-c",
+        "read /home/cosc/student/myu37/Desktop/" + file_name,
+        "optimize",
+        'display solution variables -'
+    ] 
+    proc = subprocess.Popen([command] + args,stdout=subprocess.PIPE)
+    out,err = proc.communicate()
+    result = out.decode("utf-8")
 
+    return result    
+    
 def main():
     sourceNode = 9
     transitNode = 3
@@ -133,10 +146,13 @@ def main():
         seventh = bounds(source, transit, dest)
         eighth = binary_list(source, transit, dest)
         lp = first + second + third + fourth + fifth + sixth + seventh + eighth
-
-
+        
         create_file(lp, len(source), transitNode, len(dest))
-
+        start_time = time.time()
+        file_name = "{}{}{}.lp".format(sourceNode,transitNode,destionNode)
+        print(run_cplex(file_name))
+        end_time = time.time()
+        print("Run time: {}".format(end_time - start_time))        
 
         transitNode += 1
 
