@@ -1,0 +1,67 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "939",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": ["-x", "9", "-y", "3", "-z", "9", ]
+        },
+        {
+            "name": "949",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": ["-x", "9", "-y", "4", "-z", "9", ]
+        },
+        {
+            "name": "959",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": ["-x", "9", "-y", "5", "-z", "9", ]
+        },
+        {
+            "name": "969",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": ["-x", "9", "-y", "6", "-z", "9", ]
+        },
+        {
+            "name": "979",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": ["-x", "9", "-y", "7", "-z", "9", ]
+        },
+        {
+            "name": "989",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": ["-x", "9", "-y", "8", "-z", "9", ]
+        },
+        {
+            "name": "324",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": ["-x", "3", "-y", "2", "-z", "4", ]
+        },
+    ],
+    "compounds": [
+        {
+            "name": "the 9's",
+            "configurations": ["939","949","959","969","979","989"]
+        }
+    ]
+}

@@ -1,6 +1,8 @@
 import sys
 import time
 import subprocess
+import argparse
+import os
 
 path_num=2
 
@@ -114,46 +116,48 @@ def create_file(lp, X, Y, Z):
     f.close()
     
 def run_cplex(file_name):
-    command="/home/cosc/student/myu37/cplex/bin/x86-64_linux/cplex"
+    command="cplex"
     args=[
         "-c",
-        "read /home/cosc/student/myu37/Desktop/" + file_name,
+        "read " + str(os.path.dirname(os.path.realpath(__file__))) + "\\" + file_name,
         "optimize",
         'display solution variables -'
     ] 
-    proc = subprocess.Popen([command] + args,stdout=subprocess.PIPE)
-    out,err = proc.communicate()
-    result = out.decode("utf-8")
+    proc = subprocess.call([command] + args)
 
-    return result    
+    return True   
     
-def main():
-    sourceNode = 9
-    transitNode = 3
-    destionNode = 9
+def main(args):
+    sourceNode = int(args.x)
+    transitNode = int(args.y)
+    destionNode = int(args.z)
 
     source = [i for i in range(1,sourceNode + 1)]
     dest = [i for i in range(1,destionNode + 1)]
-    while transitNode <= 8:
+    transit= [i for i in range(1, transitNode+1)]
+    first = demand_volume(source, transit, dest)
+    second = binary_variable(source, transit, dest)
+    third = source_transit_capacity(source, transit, dest)
+    fourth = transit_dest_capacity(source, transit, dest)
+    fifth = path_flow(source, transit, dest)
+    sixth = load(source, transit, dest)
+    seventh = bounds(source, transit, dest)
+    eighth = binary_list(source, transit, dest)
+    lp = first + second + third + fourth + fifth + sixth + seventh + eighth
+    
+    create_file(lp, len(source), transitNode, len(dest))
+    start_time = time.time()
+    file_name = "{}{}{}.lp".format(sourceNode,transitNode,destionNode)
+    print(run_cplex(file_name))
+    end_time = time.time()
+    print("Run time: {}".format(end_time - start_time))        
 
-        transit= [i for i in range(1, transitNode+1)]
-        first = demand_volume(source, transit, dest)
-        second = binary_variable(source, transit, dest)
-        third = source_transit_capacity(source, transit, dest)
-        fourth = transit_dest_capacity(source, transit, dest)
-        fifth = path_flow(source, transit, dest)
-        sixth = load(source, transit, dest)
-        seventh = bounds(source, transit, dest)
-        eighth = binary_list(source, transit, dest)
-        lp = first + second + third + fourth + fifth + sixth + seventh + eighth
-        
-        create_file(lp, len(source), transitNode, len(dest))
-        start_time = time.time()
-        file_name = "{}{}{}.lp".format(sourceNode,transitNode,destionNode)
-        print(run_cplex(file_name))
-        end_time = time.time()
-        print("Run time: {}".format(end_time - start_time))        
-
-        transitNode += 1
-
-main()
+if __name__ == "__main__":
+    # argument parsing
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-x', '--x')
+    parser.add_argument('-y', '--y')
+    parser.add_argument('-z', '--z')
+    args = parser.parse_args()
+    # start main function
+    main(args)
